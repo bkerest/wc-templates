@@ -2,7 +2,7 @@
 /*
 Plugin Name: WC Dynamic Templates
 Description: Use dynamic HTML templates as shortcodes in WooCommerce products.
-Version: 1.2
+Version: 2.0.0
 Author: vker
 Text Domain: wc-dynamic-templates
 License: GPL2
@@ -26,16 +26,31 @@ if ($plugin_folder_name !== 'wc-templates') {
 }
 
 define('WCDT_PATH', plugin_dir_path(__FILE__));
+define('WCDT_URL', plugin_dir_url(__FILE__));
 
 require_once WCDT_PATH . 'includes/post-type-template.php';
 require_once WCDT_PATH . 'includes/shortcode-renderer.php';
 require_once WCDT_PATH . 'includes/template-visibility.php';
 require_once WCDT_PATH . 'includes/meta-box-visibility.php';
+require_once WCDT_PATH . 'includes/template-style-loader.php';
+require_once WCDT_PATH . 'includes/template-inline-css.php';
+require_once WCDT_PATH . 'includes/attribute-shortcodes.php';
+require_once WCDT_PATH . 'includes/template-groups.php';
+require_once WCDT_PATH . 'includes/template-group-style.php';
+require_once WCDT_PATH . 'includes/template-preview.php';
+require_once WCDT_PATH . 'includes/template-taxonomy.php';
+require_once WCDT_PATH . 'includes/shortcode-tester.php';
+require_once WCDT_PATH . 'includes/template-shortcode-copy.php';
+require_once WCDT_PATH . 'includes/template-auto-assign.php';
+require_once WCDT_PATH . 'includes/template-conditional-shortcodes.php';
+require_once WCDT_PATH . 'includes/admin-help-page.php';
 
 // Plugin update checker (GitHub)
-require_once WCDT_PATH . 'plugin-update-checker/plugin-update-checker.php';
+require_once WCDT_PATH . 'plugin-update-checker/Puc/v5p6/PucFactory.php';
 
-$wcdt_update_checker = Puc_v4_Factory::buildUpdateChecker(
+use YahnisElsts\PluginUpdateChecker\v5p6\PucFactory;
+
+$wcdt_update_checker = PucFactory::buildUpdateChecker(
     'https://github.com/bkerest/wc-templates/',
     __FILE__,
     'wc-templates'

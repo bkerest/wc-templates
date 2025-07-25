@@ -8,7 +8,7 @@ Text Domain: wc-dynamic-templates
 License: GPL2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 5.0
-Tested up to: 6.5
+Tested up to: 10.0.3
 WC requires at least: 3.0
 WC tested up to: 10.0.3
 Requires PHP: 7.0

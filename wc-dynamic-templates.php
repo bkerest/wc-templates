@@ -2,7 +2,7 @@
 /*
 Plugin Name: WC Dynamic Templates
 Description: Use dynamic HTML templates as shortcodes in WooCommerce products.
-Version: 2.0.1
+Version: 2.0.2
 Author: vker
 Text Domain: wc-dynamic-templates
 License: GPL2
@@ -56,3 +56,13 @@ $wcdt_update_checker = PucFactory::buildUpdateChecker(
     'wc-templates'
 );
 $wcdt_update_checker->getVcsApi()->enableReleaseAssets();
+
+add_action('before_woocommerce_init', function() {
+    if (class_exists(\Automattic\WooCommerce\Utilities\FeaturesUtil::class)) {
+        \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility(
+            'custom_order_tables',
+            __FILE__,
+            true
+        );
+    }
+});

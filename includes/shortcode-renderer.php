@@ -1,2 +1,2 @@
 <?php
-// Placeholder for includes/shortcode-renderer.php
+// shortcode-renderer.php

@@ -12,7 +12,6 @@ Tested up to: 6.0
 WC requires at least: 3.0
 WC tested up to: 6.0
 Requires PHP: 7.0
-Author: vker
 github: https://github.com/bkerest/wc-templates
 */
 
@@ -25,7 +24,7 @@ require_once WCDT_PATH . 'includes/shortcode-renderer.php';
 require_once WCDT_PATH . 'includes/template-visibility.php';
 require_once WCDT_PATH . 'includes/meta-box-visibility.php';
 
-require_once WCDT_PATH . 'update-checker/plugin-update-checker.php';
+require_once WCDT_PATH . 'plugin-update-checker/plugin-update-checker.php';
 
 $wcdt_update_checker = Puc_v4_Factory::buildUpdateChecker(
     'https://github.com/bkerest/wc-templates/',

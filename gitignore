@@ -1,0 +1,37 @@
+# Mac & system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Node / Build / Composer (αν ποτέ χρησιμοποιήσεις)
+node_modules/
+vendor/
+composer.lock
+package-lock.json
+yarn.lock
+
+# IDEs & Editors
+.vscode/
+.idea/
+
+# Git / Logs / Debug
+*.log
+*.zip
+*.bak
+*.tmp
+*.swp
+
+# WordPress typical stuff (if placed inside wp-content/plugins/)
+wp-content/
+wp-config.php
+wp-content/uploads/
+wp-content/cache/
+wp-content/upgrade/
+wp-content/advanced-cache.php
+wp-content/backups/
+wp-content/backup-db/
+wp-content/blogs.dir/
+wp-content/plugins/hello.php
+
+# Optional: ignore plugin update checker’s .git
+plugin-update-checker/.git/

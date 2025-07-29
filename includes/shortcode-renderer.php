@@ -18,15 +18,18 @@ function wcdt_render_template_shortcode($atts) {
         return ''; // User doesn't have permission
     }
 
-    // Get post content
+    // Get the template post
     $post = get_post($template_id);
     if (!$post || $post->post_status !== 'publish') {
-        return '';
+        return ''; // Template not found or not published
     }
 
-    // Apply shortcodes inside content
+    // Get and process content
     $content = do_shortcode($post->post_content);
 
-    return '<div class="wc-template-content">' . $content . '</div>';
+    // Add wrapper div for scoping CSS
+    $wrapper_class = 'wcdt-template-wrapper template-' . $template_id;
+    return '<div class="' . esc_attr($wrapper_class) . '">' . $content . '</div>';
 }
+
 add_shortcode('wc_template', 'wcdt_render_template_shortcode');

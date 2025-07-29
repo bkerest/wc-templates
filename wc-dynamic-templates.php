@@ -26,14 +26,12 @@ if ($plugin_folder_name !== 'wc-templates') {
 }
 
 define('WCDT_PATH', plugin_dir_path(__FILE__));
-define('WCDT_URL', plugin_dir_url(__FILE__));
+define('WCDT_URL', plugins_url('/', __FILE__));
 
 require_once WCDT_PATH . 'includes/post-type-template.php';
 require_once WCDT_PATH . 'includes/shortcode-renderer.php';
 require_once WCDT_PATH . 'includes/template-visibility.php';
 require_once WCDT_PATH . 'includes/meta-box-visibility.php';
-require_once WCDT_PATH . 'includes/template-style-loader.php';
-require_once WCDT_PATH . 'includes/template-inline-css.php';
 require_once WCDT_PATH . 'includes/attribute-shortcodes.php';
 require_once WCDT_PATH . 'includes/template-groups.php';
 require_once WCDT_PATH . 'includes/template-group-style.php';
@@ -44,8 +42,8 @@ require_once WCDT_PATH . 'includes/template-shortcode-copy.php';
 require_once WCDT_PATH . 'includes/template-auto-assign.php';
 require_once WCDT_PATH . 'includes/template-conditional-shortcodes.php';
 require_once WCDT_PATH . 'includes/admin-help-page.php';
-require_once WCDT_PATH . 'includes/save-template-css.php';
 require_once plugin_dir_path(__FILE__) . 'includes/meta-box-css.php';
+
 
 // Plugin update checker (GitHub)
 require_once WCDT_PATH . 'plugin-update-checker/Puc/v5p6/PucFactory.php';

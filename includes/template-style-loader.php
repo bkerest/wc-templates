@@ -4,14 +4,10 @@
 if (!defined('ABSPATH')) exit;
 
 function wcdt_enqueue_template_styles() {
-    if (!is_singular('product')) return;
+    global $wcdt_requested_templates;
+    if (!is_array($wcdt_requested_templates)) return;
 
-    global $post;
-    if (!isset($post->post_content)) return;
-
-    // Find all used wc_template shortcodes in product content
-    preg_match_all('/\[wc_template[^\]]*id=["\']?(\d+)["\']?[^\]]*\]/', $post->post_content, $matches);
-    $template_ids = array_map('intval', $matches[1]);
+    $template_ids = array_unique(array_map('intval', $wcdt_requested_templates));
 
     foreach ($template_ids as $template_id) {
         $css_path = WCDT_PATH . 'assets/css/template-' . $template_id . '.css';
@@ -22,4 +18,4 @@ function wcdt_enqueue_template_styles() {
         }
     }
 }
-add_action('wp_enqueue_scripts', 'wcdt_enqueue_template_styles');
+add_action('wp_footer', 'wcdt_enqueue_template_styles', 99);

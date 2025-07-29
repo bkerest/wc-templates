@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: WC Dynamic Templates
-Description: Use dynamic HTML templates as shortcodes in WooCommerce products.
-Version: 2.0.5
-Author: vker
+Description: Use dynamic HTML templates as shortcodes in WooCommerce products with unit conversion.
+Version: 2.1.5
+Author: ELVIAL Digital Services
 Text Domain: wc-dynamic-templates
 License: GPL2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -42,6 +42,7 @@ require_once WCDT_PATH . 'includes/template-shortcode-copy.php';
 require_once WCDT_PATH . 'includes/template-auto-assign.php';
 require_once WCDT_PATH . 'includes/template-conditional-shortcodes.php';
 require_once WCDT_PATH . 'includes/admin-help-page.php';
+require_once WCDT_PATH . 'includes/wc-unit-switcher-unified.php';
 require_once plugin_dir_path(__FILE__) . 'includes/meta-box-css.php';
 
 

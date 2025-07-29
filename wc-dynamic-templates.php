@@ -2,7 +2,7 @@
 /*
 Plugin Name: WC Dynamic Templates
 Description: Use dynamic HTML templates as shortcodes in WooCommerce products with unit conversion.
-Version: 2.1.5
+Version: 2.1.0
 Author: ELVIAL Digital Services
 Text Domain: wc-dynamic-templates
 License: GPL2

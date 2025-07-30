@@ -27,6 +27,20 @@ function wcdt_register_template_group_taxonomy() {
 }
 add_action('init', 'wcdt_register_template_group_taxonomy');
 
+// Show Shortcode column in Template Groups list
+add_filter('manage_edit-template_group_columns', function($columns) {
+    $columns['shortcode'] = __('Shortcode');
+    return $columns;
+});
+
+add_filter('manage_template_group_custom_column', function($out, $column_name, $term_id) {
+    if ($column_name == 'shortcode') {
+        return '<code>[template_group id="' . $term_id . '"]</code>';
+    }
+    return $out;
+}, 10, 3);
+
+
 // Shortcode to render all templates in a group
 function wcdt_render_template_group_shortcode($atts) {
     $atts = shortcode_atts([

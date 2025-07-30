@@ -18,28 +18,28 @@ function wcdt_register_template_group_taxonomy() {
     );
 
     register_taxonomy('wc_template_group', 'wc_template', array(
-        'hierarchical' => false,
+        'hierarchical' => true, // 👈 ΕΠΙΔΙΟΡΘΩΘΗΚΕ
         'labels' => $labels,
         'show_ui' => true,
         'show_admin_column' => true,
         'rewrite' => array('slug' => 'wc-template-group'),
+        'show_in_rest' => true,
     ));
 }
 add_action('init', 'wcdt_register_template_group_taxonomy');
 
 // Show Shortcode column in Template Groups list
-add_filter('manage_edit-template_group_columns', function($columns) {
+add_filter('manage_edit-wc_template_group_columns', function($columns) {
     $columns['shortcode'] = __('Shortcode');
     return $columns;
 });
 
-add_filter('manage_template_group_custom_column', function($out, $column_name, $term_id) {
+add_filter('manage_wc_template_group_custom_column', function($out, $column_name, $term_id) {
     if ($column_name == 'shortcode') {
-        return '<code>[template_group id="' . $term_id . '"]</code>';
+        return '<code>[wc_template_group id="' . $term_id . '"]</code>';
     }
     return $out;
 }, 10, 3);
-
 
 // Shortcode to render all templates in a group
 function wcdt_render_template_group_shortcode($atts) {
@@ -69,8 +69,9 @@ function wcdt_render_template_group_shortcode($atts) {
 
     $output = '';
     foreach ($templates as $template) {
-        if (!wcdt_user_can_see_template($template->ID)) continue;
-        $output .= '<div class="wc-template-group-item">' . do_shortcode($template->post_content) . '</div>';
+        if (!function_exists('wcdt_user_can_see_template') || wcdt_user_can_see_template($template->ID)) {
+            $output .= '<div class="wc-template-group-item">' . do_shortcode($template->post_content) . '</div>';
+        }
     }
 
     return '<div class="wc-template-group">' . $output . '</div>';

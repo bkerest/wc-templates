@@ -80,7 +80,7 @@ function wcuam_convert_value($value, $unit, $type) {
         }
         if (!$closest || $closest[0] == 0) return $whole . '″';
         if ($whole == 0) return $closest[0] . '/' . $closest[1] . '″';
-        return $whole . ' ' . $closest[0] . '/' . $closest[1] . '″';
+        return $whole . '  ' . $closest[0] . '/' . $closest[1] . '″';
     } elseif ($type === 'decimal') {
         switch ($unit) {
             case 'kg': return round($val * 2.20462, 2);

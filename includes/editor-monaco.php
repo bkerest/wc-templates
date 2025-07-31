@@ -1,55 +1,84 @@
 <?php
-// File: includes/editor-monaco.php
+add_action('admin_enqueue_scripts', function () {
+    wp_enqueue_script('monaco-loader', 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js', [], null, true);
 
-if (!defined('ABSPATH')) exit;
+    // Get dynamic snippets from DB
+    $snippets = get_posts([
+        'post_type' => 'wcdt_snippet',
+        'numberposts' => -1,
+    ]);
+    $js_snippets = [];
 
-// Add admin menu item
-add_action('admin_menu', function () {
-    add_submenu_page(
-        'options-general.php',
-        'HTML Code Editor',
-        'Template Editor',
-        'manage_options',
-        'html-code-editor',
-        'wcdt_render_monaco_editor'
-    );
-});
+    foreach ($snippets as $snippet) {
+        $insert = get_post_meta($snippet->ID, '_insert_text', true);
+        $doc = get_post_meta($snippet->ID, '_doc_text', true);
+        $js_snippets[] = [
+            'label' => $snippet->post_title,
+            'insertText' => $insert,
+            'documentation' => $doc,
+        ];
+    }
 
-// Render Monaco Editor
-function wcdt_render_monaco_editor()
-{
-    $snippets = get_option('wcdt_snippets', []);
+    $encoded_snippets = json_encode($js_snippets);
 
-    echo '<div class="wrap"><h1>Template Code Editor</h1>';
-    echo '<div id="monaco-editor" style="height: 700px; border: 1px solid #666;"></div>';
-    echo '</div>';
+    wp_add_inline_script('monaco-loader', "
+        require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs' }});
+        require(['vs/editor/editor.main'], function () {
+            var textarea = document.getElementById('content');
+            if (!textarea) return;
+            textarea.style.display = 'none';
 
-    echo '<script src="https://unpkg.com/monaco-editor@latest/min/vs/loader.js"></script>';
-    echo '<script>
-        const customSnippets = ' . json_encode(array_values($snippets)) . ';
-        
-        require.config({ paths: { vs: "https://unpkg.com/monaco-editor@latest/min/vs" }});
-        require(["vs/editor/editor.main"], function () {
-            const editor = monaco.editor.create(document.getElementById("monaco-editor"), {
-                value: "<!-- Γράψε HTML template εδώ -->\\n",
-                language: "html",
-                theme: "vs-dark",
-                automaticLayout: true,
-                fontSize: 14,
-            });
+            var container = document.createElement('div');
+            container.id = 'monaco-editor';
+            container.style.width = '100%';
+            container.style.height = '600px';
+            container.style.resize = 'vertical';
+            textarea.parentNode.insertBefore(container, textarea.nextSibling);
 
-            monaco.languages.registerCompletionItemProvider("html", {
+            var model = monaco.editor.createModel(textarea.value, 'html');
+
+            monaco.languages.registerCompletionItemProvider('html', {
                 provideCompletionItems: () => {
-                    const suggestions = customSnippets.map((s, i) => ({
-                        label: s.trigger,
-                        kind: monaco.languages.CompletionItemKind.Snippet,
-                        insertText: s.expansion,
-                        documentation: s.description,
-                        insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-                    }));
-                    return { suggestions };
+                    return {
+                        suggestions: " . $encoded_snippets . ".map(s => ({
+                            label: s.label,
+                            kind: monaco.languages.CompletionItemKind.Snippet,
+                            insertText: s.insertText,
+                            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                            documentation: s.documentation
+                        }))
+                    };
                 }
             });
+
+            var editor = monaco.editor.create(container, {
+                model: model,
+                theme: 'vs-dark',
+                automaticLayout: true,
+                fontSize: 14,
+                minimap: { enabled: false },
+                wordWrap: 'on',
+                language: 'html',
+                autoClosingBrackets: 'always',
+                autoIndent: 'full'
+            });
+
+            // Add fullscreen toggle
+            var btn = document.createElement('button');
+            btn.textContent = '🖵';
+            btn.style.position = 'absolute';
+            btn.style.top = '4px';
+            btn.style.right = '4px';
+            btn.style.zIndex = '1000';
+            btn.onclick = function () {
+                container.classList.toggle('fullscreen');
+                container.style.height = container.classList.contains('fullscreen') ? '90vh' : '600px';
+            };
+            container.parentNode.insertBefore(btn, container);
+
+            textarea.form.addEventListener('submit', function () {
+                textarea.value = editor.getValue();
+            });
         });
-    </script>';
-}
+    ");
+});

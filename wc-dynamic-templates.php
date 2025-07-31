@@ -43,8 +43,10 @@ require_once WCDT_PATH . 'includes/template-auto-assign.php';
 require_once WCDT_PATH . 'includes/template-conditional-shortcodes.php';
 require_once WCDT_PATH . 'includes/admin-help-page.php';
 require_once WCDT_PATH . 'includes/wc-unit-switcher-unified.php';
-require_once WCDT_PATH . 'includes/editor-monaco.php';
-require_once WCDT_PATH . 'includes/wcdt-snippet-manager.php';
+include_once WCDT_PATH . '/includes/editor-monaco.php';
+include_once WCDT_PATH . '/admin/snippet-manager.php';
+include_once WCDT_PATH . '/admin/settings-page.php';
+
 require_once WCDT_PATH . 'includes/meta-box-css.php';
 
 

@@ -93,6 +93,31 @@ function wcuam_convert_value($value, $unit, $type) {
 }
 
 // === Real3D Flipbook Shortcode Switch ===
+// add_shortcode('unit_lang_flipbook', function ($atts, $content = null) {
+//     $atts = shortcode_atts([
+//         'imperial_en' => '',
+//         'imperial_el' => '',
+//         'metric_en'   => '',
+//         'metric_el'   => '',
+//     ], $atts);
+
+//     $imperial = isset($_COOKIE['elvial_units']) && $_COOKIE['elvial_units'] === 'imperial';
+//     $shortcode_key = $imperial ? 'imperial_' : 'metric_';
+
+//     $current_lang = get_locale();
+//     $current_lang = strpos($current_lang, 'el') !== false ? 'el' : 'en';
+//     if (!in_array($current_lang, ['el', 'en'])) $current_lang = 'en';
+
+//     $shortcode_key .= $current_lang;
+
+//     $flipbook_id = $atts[$shortcode_key] ?? '';
+
+//     if (is_numeric($flipbook_id)) {
+//         return do_shortcode("[real3dflipbook id='$flipbook_id']");
+//     }
+
+//     return ''; // empty if invalid
+// });
 add_shortcode('unit_lang_flipbook', function ($atts, $content = null) {
     $atts = shortcode_atts([
         'imperial_en' => '',
@@ -102,21 +127,34 @@ add_shortcode('unit_lang_flipbook', function ($atts, $content = null) {
     ], $atts);
 
     $imperial = isset($_COOKIE['elvial_units']) && $_COOKIE['elvial_units'] === 'imperial';
-    $shortcode_key = $imperial ? 'imperial_' : 'metric_';
-
     $current_lang = get_locale();
     $current_lang = strpos($current_lang, 'el') !== false ? 'el' : 'en';
     if (!in_array($current_lang, ['el', 'en'])) $current_lang = 'en';
 
-    $shortcode_key .= $current_lang;
+    if ($imperial) {
+        $imperial_key = 'imperial_' . $current_lang;
+        $metric_key = 'metric_' . $current_lang;
+        $imperial_id = $atts[$imperial_key] ?? '';
+        $metric_id = $atts[$metric_key] ?? '';
 
-    $flipbook_id = $atts[$shortcode_key] ?? '';
-
-    if (is_numeric($flipbook_id)) {
-        return do_shortcode("[real3dflipbook id='$flipbook_id']");
+        if (is_numeric($imperial_id)) {
+            return do_shortcode("[real3dflipbook id='$imperial_id']");
+        } elseif (is_numeric($metric_id)) {
+            // Imperial not available, show metric with message
+            $flipbook = do_shortcode("[real3dflipbook id='$metric_id']");
+            return $flipbook . '<div style="font-style: italic; margin-top:10px;">Not available in imperial</div>';
+        } else {
+            return '<div style="font-style: italic;">Flipbook not available</div>';
+        }
+    } else {
+        $metric_key = 'metric_' . $current_lang;
+        $metric_id = $atts[$metric_key] ?? '';
+        if (is_numeric($metric_id)) {
+            return do_shortcode("[real3dflipbook id='$metric_id']");
+        } else {
+            return '<div style="font-style: italic;">Flipbook not available</div>';
+        }
     }
-
-    return ''; // empty if invalid
 });
 
 // === Download Shortcode Switch ===
